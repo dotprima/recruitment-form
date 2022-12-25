@@ -24,6 +24,7 @@
 
         @include('components.dashboard.css')
         @yield('css')
+        @livewireStyles
 </head>
 
 <body>
@@ -70,6 +71,8 @@
 
     @include('components.dashboard.js')
     @yield('js')
+    @livewireScripts
+    @stack('scripts')
 </body>
 
 </html>

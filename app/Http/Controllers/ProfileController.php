@@ -78,6 +78,9 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return response()->json([
+            'success' => true,
+            'message' => 'Akun Berhasil Dihapus',  
+        ]);
     }
 }

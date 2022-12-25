@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
             onStatusChanged: function (areFieldsValid) {
               areFieldsValid
                 ? // Enable the submit button
-                  // so user has a chance to submit the form again
-                  deactivateButton.removeAttribute('disabled')
+                // so user has a chance to submit the form again
+                deactivateButton.removeAttribute('disabled')
                 : // Disable the submit button
-                  deactivateButton.setAttribute('disabled', 'disabled');
+                deactivateButton.setAttribute('disabled', 'disabled');
             }
           }),
           // Submit the form when all fields are valid
@@ -109,27 +109,40 @@ document.addEventListener('DOMContentLoaded', function (e) {
             },
             buttonsStyling: false
           }).then(function (result) {
-            if (result.value) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Your file has been deleted.',
-                customClass: {
-                  confirmButton: 'btn btn-success'
-                }
-              });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              Swal.fire({
-                title: 'Cancelled',
-                text: 'Deactivation Cancelled!!',
-                icon: 'error',
-                customClass: {
-                  confirmButton: 'btn btn-success'
-                }
-              });
-            }
+            let token = $("meta[name='csrf-token']").attr("content");
+            $.ajax({
+              url: "/profile",
+              type: "DELETE",
+              data: {
+                "password": $('#deletepassword').val(),
+                "_token": token
+              },
+              success: function (response) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Deleted!',
+                  text: 'Your file has been deleted.',
+                  customClass: {
+                    confirmButton: 'btn btn-success'
+                  }
+                }).then(function (result) {
+                  window.location.href = "/";
+                });
+              },
+              error: function (error) {
+                Swal.fire({
+                  title: 'Cancelled',
+                  text: 'Deactivation Cancelled!!',
+                  icon: 'error',
+                  customClass: {
+                    confirmButton: 'btn btn-success'
+                  }
+                })
+              },
+            });
           });
         }
+
       };
     }
 
