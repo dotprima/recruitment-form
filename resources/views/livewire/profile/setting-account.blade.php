@@ -26,7 +26,7 @@
         <!-- Account -->
         <div class="card-body">
             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                <img src="../../assets/img/avatars/14.png" alt="user-avatar" class="d-block w-px-100 h-px-100 rounded"
+                <img src="<?= (!Auth::user()->images == null) ?  "placeholder.png" :  "https://ui-avatars.com/api/?name=".Auth::user()->name?>" alt="user-avatar" class="d-block w-px-100 h-px-100 rounded"
                     id="uploadedAvatar" />
                 <div class="button-wrapper">
                     <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
@@ -259,12 +259,14 @@
             </div>
             <form id="formAccountDeactivation" onsubmit="return false" method="POST">
                 <div class="mb-3 col-md-6">
-                    <label for="address" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="deletepassword" />
+                    <input class="form-control" type="password" name="deletepassword" id="deletepassword"
+                        required />
+                    <label class="form-check-label" for="deletepassword">I confirm my account
+                        deactivation</label>
                 </div>
                 <div class="form-check mb-4">
                     <input class="form-check-input" type="checkbox" name="accountActivation"
-                        id="accountActivation" />
+                        id="accountActivation" required/>
                     <label class="form-check-label" for="accountActivation">I confirm my account
                         deactivation</label>
                 </div>

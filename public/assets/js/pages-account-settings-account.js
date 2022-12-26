@@ -59,6 +59,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 message: 'Please confirm you want to delete account'
               }
             }
+          },
+          deletepassword: {
+            validators: {
+              notEmpty: {
+                message: 'Please confirm you want to delete account'
+              }
+            }
           }
         },
         plugins: {
