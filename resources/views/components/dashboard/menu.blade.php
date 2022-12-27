@@ -31,19 +31,19 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
-        <li class="menu-item active  {{ (request()->is('dashboard')) ? 'open' : '' }}">
+        <li class="menu-item active open">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Dashboards">Dashboards</div>
                 <div class="badge bg-label-primary rounded-pill ms-auto">3</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item  {{ (request()->is('dashboard')) ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}" class="menu-link">
+                <li class="menu-item active">
+                    <a href="index.html" class="menu-link">
                         <div data-i18n="Analytics">Analytics</div>
                     </a>
                 </li>
-                {{-- <li class="menu-item">
+                <li class="menu-item">
                     <a href="dashboards-crm.html" class="menu-link">
                         <div data-i18n="CRM">CRM</div>
                     </a>
@@ -52,14 +52,12 @@
                     <a href="dashboards-ecommerce.html" class="menu-link">
                         <div data-i18n="eCommerce">eCommerce</div>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </li>
 
-       
-
         <!-- Layouts -->
-        {{-- <li class="menu-item">
+        <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-layout-sidebar"></i>
                 <div data-i18n="Layouts">Layouts</div>
@@ -112,10 +110,10 @@
                     </a>
                 </li>
             </ul>
-        </li> --}}
+        </li>
 
         <!-- Apps & Pages -->
-        {{-- <li class="menu-header small text-uppercase">
+        <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Apps &amp; Pages</span>
         </li>
         <li class="menu-item">
@@ -123,16 +121,14 @@
                 <i class="menu-icon tf-icons ti ti-mail"></i>
                 <div data-i18n="Email">Email</div>
             </a>
-        </li> --}}
-        <li class="menu-item  {{ (request()->is('chat')) ? 'active' : '' }}">
-            <a href="{{ route('chat') }}" class="menu-link ">
+        </li>
+        <li class="menu-item">
+            <a href="app-chat.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-messages"></i>
                 <div data-i18n="Chat">Chat</div>
             </a>
         </li>
-
-
-        {{-- <li class="menu-item">
+        <li class="menu-item">
             <a href="app-calendar.html" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-calendar"></i>
                 <div data-i18n="Calendar">Calendar</div>
@@ -940,6 +936,6 @@
                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                 <div data-i18n="Documentation">Documentation</div>
             </a>
-        </li> --}}
+        </li>
     </ul>
 </aside>
