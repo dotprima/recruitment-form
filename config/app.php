@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        App\Providers\OpenAiServiceProvider::class,
 
         /*
          * Application Service Providers...

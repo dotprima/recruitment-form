@@ -3,8 +3,54 @@
  */
 
 'use strict';
-
+function sendchat(){
+  let token = $("meta[name='csrf-token']").attr("content");
+  document.getElementById("messagecontent").disabled = true;
+  $.ajax({
+    url: "/chat",
+    type: "POST",
+    data: {
+      "_token": token,
+      "chat": $('#messagecontent').val(),
+    },
+    success: function (response) {
+      let renderMsg = document.createElement('li');
+      let chatHistoryBody = document.querySelector('.chat-history-body')
+      renderMsg.className = 'chat-message';
+      renderMsg.innerHTML = "<div class='d-flex overflow-hidden'><div class='user-avatar flex-shrink-0 me-3'><div class='avatar avatar-sm'> <img src='../../assets/img/avatars/2.png' alt='Avatar'class='rounded-circle' /></div></div><div class='chat-message-wrapper flex-grow-1'><div class='chat-message-text'><p class='mb-0'>"+response['result']+"</p></div><div class='text-muted mt-1'><small>10:15 AM</small></div></div></div>";
+      document.querySelector('ul#chat-history').appendChild(renderMsg);
+      chatHistoryBody.scrollTo(0, chatHistoryBody.scrollHeight);
+      document.getElementById("messagecontent").disabled = false;
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Deleted!',
+      //   text: 'Your file has been deleted.',
+      //   customClass: {
+      //     confirmButton: 'btn btn-success'
+      //   }
+      // }).then(function (result) {
+      //   window.location.href = "/";
+      // });
+    },
+    
+    error: function (error) {
+      // let renderMsg = document.createElement('div');
+      // renderMsg.className = 'chat-message-text mt-2';
+      // renderMsg.innerHTML = "<div class='d-flex overflow-hidden'><div class='user-avatar flex-shrink-0 me-3'><div class='avatar avatar-sm'> <img src='../../assets/img/avatars/2.png' alt='Avatar'class='rounded-circle' /></div></div><div class='chat-message-wrapper flex-grow-1'><div class='chat-message-text'><p class='mb-0'>Do you have design files for Vuexy?</p></div><div class='text-muted mt-1'><small>10:15 AM</small></div></div></div>";
+      // document.querySelector('li:last-child .chat-message-wrapper').innerHTML = renderMsg);
+      // Swal.fire({
+      //   title: 'Cancelled',
+      //   text: 'Deactivation Cancelled!!',
+      //   icon: 'error',
+      //   customClass: {
+      //     confirmButton: 'btn btn-success'
+      //   }
+      // })
+    },
+  });
+}
 document.addEventListener('DOMContentLoaded', function () {
+  
   (function () {
     const chatContactsBody = document.querySelector('.app-chat-contacts .sidebar-body'),
       chatContactListItems = [].slice.call(
@@ -160,12 +206,16 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       if (messageInput.value) {
         // Create a div and add a class
-        let renderMsg = document.createElement('div');
-        renderMsg.className = 'chat-message-text mt-2';
-        renderMsg.innerHTML = '<p class="mb-0">' + messageInput.value + '</p>';
-        document.querySelector('li:last-child .chat-message-wrapper').appendChild(renderMsg);
+        let renderMsg = document.createElement('li');
+        renderMsg.className = 'chat-message chat-message-right';
+        renderMsg.innerHTML = "<li class='chat-message chat-message-right' id='reply'> <div class='d-flex overflow-hidden'> <div class='chat-message-wrapper flex-grow-1 w-50'> <div class='chat-message-text'> <p class='mb-0'>"+messageInput.value+"</p> </div> <div class='text-end text-muted mt-1'> <i class='ti ti-checks ti-xs me-1'></i> <small>10:15 AM</small> </div> </div> <div class='user-avatar flex-shrink-0 ms-3'> <div class='avatar avatar-sm'> <img src='../../assets/img/avatars/1.png' alt='Avatar' class='rounded-circle' /> </div> </div> </div> </li>";
+        document.querySelector('ul#chat-history').appendChild(renderMsg);
         messageInput.value = '';
+        messagecontent.value = '';
         scrollToBottom();
+      
+        sendchat();
+  
       }
     });
 
