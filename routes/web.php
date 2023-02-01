@@ -31,7 +31,7 @@ Route::middleware('applicant')->group(function () {
     // Route::get('/applicant', [ProfileController::class, 'profil'])->name('profile');
     Route::get('/applicant/setting/security', [ProfileController::class, 'profileSecurity'])->name('profile.profileSecurity');
     Route::get('/applicant', [ProfileController::class, 'profileAccount'])->name('profile.profileAccount');
-    Route::post('/applicant/setting', [ProfileController::class, 'upload']);
+    Route::post('/applicant', [ProfileController::class, 'upload']);
     Route::patch('/applicant/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/applicant/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
