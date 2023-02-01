@@ -20,7 +20,7 @@ id="layout-navbar">
     <!-- /Search -->
 
     <ul class="navbar-nav flex-row align-items-center ms-auto">
-        <!-- Language -->
+        {{-- <!-- Language -->
         <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                 data-bs-toggle="dropdown">
@@ -53,7 +53,7 @@ id="layout-navbar">
                 </li>
             </ul>
         </li>
-        <!--/ Language -->
+        <!--/ Language --> --}}
 
         <!-- Style Switcher -->
         <li class="nav-item me-2 me-xl-0">
@@ -63,13 +63,13 @@ id="layout-navbar">
         </li>
         <!--/ Style Switcher -->
 
-        <!-- Quick links  -->
+        {{-- <!-- Quick links  -->
         @include('components.dashboard.navbar_link')
         <!-- Quick links -->
 
         <!-- Notification -->
         @include('components.dashboard.navbar_notification')
-        <!--/ Notification -->
+        <!--/ Notification --> --}}
 
         <!-- User -->
         @include('components.dashboard.navbar_user')
@@ -78,9 +78,12 @@ id="layout-navbar">
 </div>
 
 <!-- Search Small Screens -->
+@if (Auth::user()->roles=="admin")
 <div class="navbar-search-wrapper search-input-wrapper d-none">
     <input type="text" class="form-control search-input container-xxl border-0"
         placeholder="Search..." aria-label="Search..." />
     <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
-</div>
+</div> 
+@endif
+
 </nav>

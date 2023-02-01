@@ -8,48 +8,55 @@
             <a class="nav-link" href="{{ route('profile.profileSecurity') }}"><i class="ti-xs ti ti-lock me-1"></i>
                 Security</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages-account-settings-billing.html"><i
-                    class="ti-xs ti ti-file-description me-1"></i> Billing & Plans</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages-account-settings-notifications.html"><i class="ti-xs ti ti-bell me-1"></i>
-                Notifications</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages-account-settings-connections.html"><i class="ti-xs ti ti-link me-1"></i>
-                Connections</a>
-        </li>
     </ul>
     <div class="card mb-4">
         <h5 class="card-header">Profile Details</h5>
         <!-- Account -->
         <div class="card-body">
-            <div class="d-flex align-items-start align-items-sm-center gap-4">
-                <img src="<?= (!Auth::user()->images == null) ?  "placeholder.png" :  "https://ui-avatars.com/api/?name=".Auth::user()->name?>" alt="user-avatar" class="d-block w-px-100 h-px-100 rounded"
-                    id="uploadedAvatar" />
-                <div class="button-wrapper">
-                    <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
-                        <span class="d-none d-sm-block">Upload new photo</span>
-                        <i class="ti ti-upload d-block d-sm-none"></i>
-                        <input type="file" id="upload" class="account-file-input" hidden
-                            accept="image/png, image/jpeg" />
-                    </label>
-                    <button type="button" class="btn btn-label-secondary account-image-reset mb-3">
-                        <i class="ti ti-refresh-dot d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Reset</span>
-                    </button>
+            <form method="POST" enctype="multipart/form-data">
+                @csrf
+                @if (session()->has('message_upload'))
+                    <div class="alert alert-success">
+                        {{ session()->get('message_upload') }}
+                    </div>
+                @endif
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                    <img src="<?= !Auth::user()->images == null ? URL::to('/') . '/' . Auth::user()->images : 'https://ui-avatars.com/api/?name=' . Auth::user()->name ?>"
+                        alt="user-avatar" class="d-block w-px-100 h-px-100 rounded" id="uploadedAvatar" />
+                    <div class="button-wrapper">
 
-                    <div class="text-muted">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                        <label for="upload" class="btn btn-secondary me-2 mb-3" tabindex="0">
+                            <span class="d-none d-sm-block">Upload new photo</span>
+                            <i class="ti ti-upload d-block d-sm-none"></i>
+                            <input type="hidden" name="id" value="{{ Auth::user()->_id }}">
+                            <input type="file" id="upload" class="account-file-input" hidden
+                                accept="image/png, image/jpeg" name="photo" />
+                        </label>
+                        <button type="submit" class="btn btn-label-primary mb-3">
+                            <i class="ti ti-refresh-dot d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Upload Gambar</span>
+                        </button>
+
+                        <div class="text-muted">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                    </div>
                 </div>
-            </div>
+                <form>
         </div>
         <hr class="my-0" />
         <div class="card-body">
             <form>
                 <div class="row">
                     <div class="mb-3 col-md-6">
-                        <label for="name" class="form-label">First Name</label>
+                        <label for="name" class="form-label">Nama Depan</label>
                         <input class="form-control" type="text" id="name" wire:model="name" autofocus />
                         @error('name')
                             <span class="error">{{ $message }}</span>
@@ -57,7 +64,7 @@
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="last_name" class="form-label">Last Name</label>
+                        <label for="last_name" class="form-label">Nama Belakang</label>
                         <input class="form-control" type="text" wire:model="last_name" id="last_name" />
                         @error('last_name')
                             <span class="error">{{ $message }}</span>
@@ -66,144 +73,146 @@
 
                     <div class="mb-3 col-md-6">
                         <label for="email" class="form-label">E-mail</label>
-                        <input class="form-control" type="text" id="email" wire:model="email" />
+                        <input class="form-control" type="email" id="email" wire:model="email" />
                         @error('email')
                             <span class="error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="organization" class="form-label">Organization</label>
-                        <input type="text" class="form-control" placeholder="{{ auth()->user()->organization }}"
-                            id="organization" wire:model="organization" />
-                        @error('organization')
+                        <label for="last_name" class="form-label">No KTP</label>
+                        <input class="form-control" type="number" wire:model="no_ktp" id="no_ktp" />
+                        @error('no_ktp')
                             <span class="error">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label class="form-label" for="phone_number">Phone Number</label>
-                        <div class="input-group input-group-merge">
-                            <span class="input-group-text">ID (+62)</span>
-                            <input type="text" id="phone_number" wire:model="phone_number" class="form-control" />
-                        </div>
-                        @error('phone_number')
-                            <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" wire:model="address" />
-                        @error('address')
-                            <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="state" class="form-label">State</label>
-                        <input class="form-control" type="text" id="state" wire:model="state" />
-                        @error('state')
-                            <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label for="zip_code" class="form-label">Zip Code</label>
-                        <input type="text" class="form-control" id="zip_code" wire:model="zip_code"
-                            maxlength="6" />
-                        @error('zip_code')
-                            <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label" for="country">Country</label>
-                        <select id="country" wire:model="country" class="select2 form-select">
-                            <option value="">Select</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Belarus">Belarus</option>
-                            <option value="Brazil">Brazil</option>
-                            <option value="Canada">Canada</option>
-                            <option value="China">China</option>
-                            <option value="France">France</option>
-                            <option value="Germany">Germany</option>
-                            <option value="India">India</option>
-                            <option value="Indonesia">Indonesia</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Italy">Italy</option>
-                            <option value="Japan">Japan</option>
-                            <option value="Korea">Korea, Republic of</option>
-                            <option value="Mexico">Mexico</option>
-                            <option value="Philippines">Philippines</option>
-                            <option value="Russia">Russian Federation</option>
-                            <option value="South Africa">South Africa</option>
-                            <option value="Thailand">Thailand</option>
-                            <option value="Turkey">Turkey</option>
-                            <option value="Ukraine">Ukraine</option>
-                            <option value="United Arab Emirates">United Arab Emirates</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="United States">United States</option>
+                        <label for="jk" class="form-label">Jenis Kelamin</label>
+                        <select id="jk" wire:model="jk" class="select2 form-select">
+                            <option value="">Pilih</option>
+                            <option value="Laki-Laki">Laki-Laki</option>
+                            <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
+
                     <div class="mb-3 col-md-6">
-                        <label for="language" class="form-label">Language</label>
-                        <select id="language" wire:model="language" class="select2 form-select">
-                            <option value="">Select Language</option>
-                            <option value="en">English</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="pt">Portuguese</option>
+                        <label for="last_name" class="form-label">Tempat Tanggal Lahir</label>
+                        <input class="form-control" type="text" wire:model="ttl" id="ttl" />
+                        @error('ttl')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Agama</label>
+                        <input class="form-control" type="text" wire:model="agama" id="agama" />
+                        @error('agama')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Golongan Darah</label>
+                        <input class="form-control" type="text" wire:model="darah" id="darah" />
+                        @error('darah')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Status</label>
+                        <input class="form-control" type="text" wire:model="status" id="status" />
+                        @error('status')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Alamat KTP</label>
+                        <input class="form-control" type="text" wire:model="alamat_ktp" id="alamat_ktp" />
+                        @error('alamat_ktp')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Alamat Tinggal</label>
+                        <input class="form-control" type="text" wire:model="alamat_tinggal"
+                            id="alamat_tinggal" />
+                        @error('alamat_tinggal')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">No Telephone</label>
+                        <input class="form-control" type="text" wire:model="no_telp" id="no_telp" />
+                        @error('no_telp')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Nama Orang Terdekat</label>
+                        <input class="form-control" type="text" wire:model="nama_orang_dekat"
+                            id="nama_orang_dekat" />
+                        @error('nama_orang_dekat')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">No Telephpne Orang Terdekat</label>
+                        <input class="form-control" type="text" wire:model="no_orang_dekat"
+                            id="no_orang_dekat" />
+                        @error('no_orang_dekat')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="ditempatkan" class="form-label">Bersedia di tempatkan diseluruh kantor
+                            perusahaan</label>
+                        <select id="ditempatkan" wire:model="ditempatkan" class="select2 form-select">
+                            <option value="">Pilih</option>
+                            <option value="Bersedia">Bersedia</option>
+                            <option value="Tidak Bersedia">Tidak Bersedia</option>
                         </select>
                     </div>
+
                     <div class="mb-3 col-md-6">
-                        <label for="timeZones" class="form-label">Timezone</label>
-                        <select id="timeZones" wire:model="timezone"class="select2 form-select">
-                            <option value="">Select Timezone</option>
-                            <option value="-12">(GMT-12:00) International Date Line West</option>
-                            <option value="-11">(GMT-11:00) Midway Island, Samoa</option>
-                            <option value="-10">(GMT-10:00) Hawaii</option>
-                            <option value="-9">(GMT-09:00) Alaska</option>
-                            <option value="-8">(GMT-08:00) Pacific Time (US & Canada)</option>
-                            <option value="-8">(GMT-08:00) Tijuana, Baja California</option>
-                            <option value="-7">(GMT-07:00) Arizona</option>
-                            <option value="-7">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-                            <option value="-7">(GMT-07:00) Mountain Time (US & Canada)</option>
-                            <option value="-6">(GMT-06:00) Central America</option>
-                            <option value="-6">(GMT-06:00) Central Time (US & Canada)</option>
-                            <option value="-6">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-                            <option value="-6">(GMT-06:00) Saskatchewan</option>
-                            <option value="-5">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-                            <option value="-5">(GMT-05:00) Eastern Time (US & Canada)</option>
-                            <option value="-5">(GMT-05:00) Indiana (East)</option>
-                            <option value="-4">(GMT-04:00) Atlantic Time (Canada)</option>
-                            <option value="-4">(GMT-04:00) Caracas, La Paz</option>
-                        </select>
+                        <label for="last_name" class="form-label">Penghasilan yang diharapkan perbulan</label>
+                        <input class="form-control" type="text" wire:model="gaji" id="gaji" />
+                        @error('gaji')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
                     </div>
-                    <div class="mb-3 col-md-6">
-                        <label for="currency" class="form-label">Currency</label>
-                        <select id="currency" wire:model="currency" class="select2 form-select">
-                            <option value="">Select Currency</option>
-                            <option value="usd">USD</option>
-                            <option value="euro">Euro</option>
-                            <option value="pound">Pound</option>
-                            <option value="bitcoin">Bitcoin</option>
-                        </select>
-                    </div>
+
+
+
                 </div>
 
                 @push('scripts')
                     <script>
                         $(document).ready(function() {
-                            $('#currency').select2();
-                            $('#currency').on('change', function(e) {
-                                var data = $('#currency').select2("val");
-                                @this.set('currency', data);
+                            $('#jk').select2();
+                            $('#jk').on('change', function(e) {
+                                var data = $('#jk').select2("val");
+                                @this.set('jk', data);
                             });
                         });
                     </script>
                     <script>
+                        $(document).ready(function() {
+                            $('#ditempatkan').select2();
+                            $('#ditempatkan').on('change', function(e) {
+                                var data = $('#ditempatkan').select2("val");
+                                @this.set('ditempatkan', data);
+                            });
+                        });
+                    </script>
+                    {{-- <script>
                         $(document).ready(function() {
                             $('#language').select2();
                             $('#language').on('change', function(e) {
@@ -229,7 +238,7 @@
                                 @this.set('country', data);
                             });
                         });
-                    </script>
+                    </script> --}}
                 @endpush
 
 
@@ -238,15 +247,369 @@
                         {{ session('message') }}
                     </div>
                 @endif
+
+                @if (session()->has('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="mt-2">
                     <button type="submit" wire:click.prevent="updateAccount()" class="btn btn-primary me-2">Save
+                        changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- /Account -->
+    </div>
+
+
+    <div class="card">
+        <h5 class="card-header">Pendidikan Terakhir</h5>
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="pendidikan" class="form-label">Jenjang Pendidikan</label>
+                        <input class="form-control" type="text" id="pendidikan" wire:model="pendidikan"
+                            autofocus />
+                        @error('pendidikan')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Nama Insitusi Akademik</label>
+                        <input class="form-control" type="text" wire:model="akademik" id="akademik" />
+                        @error('akademik')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="email" class="form-label">Jurusan</label>
+                        <input class="form-control" type="text" id="jurusan" wire:model="jurusan" />
+                        @error('jurusan')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Tahun Lulus</label>
+                        <input class="form-control" type="number" wire:model="lulus" id="lulus" />
+                        @error('lulus')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">IPK</label>
+                        <input class="form-control" type="number" wire:model="ipk" id="ipk" />
+                        @error('ipk')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                @if (session()->has('message_pendidikan'))
+                    <div class="alert alert-success">
+                        {{ session('message_pendidikan') }}
+                    </div>
+                @endif
+                @if (session()->has('error_pendidikan'))
+                    <div class="alert alert-danger">
+                        {{ session('error_pendidikan') }}
+                    </div>
+                @endif
+                <div class="mt-2">
+                    <button type="submit" wire:click.prevent="pendidikan()" class="btn btn-primary me-2">Save
+                        changes</button>
+                </div>
+            </form>
+            <br>
+            @if (session()->has('message_pendidikan_delete'))
+                <div class="alert alert-success">
+                    {{ session('message_pendidikan_delete') }}
+                </div>
+            @endif
+            @if (session()->has('error_pendidikan_delete'))
+                <div class="alert alert-danger">
+                    {{ session('error_pendidikan_delete') }}
+                </div>
+            @endif
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Jenjang Pendidikan</th>
+                        <th>Insitusi Akademik</th>
+                        <th>Jurusan</th>
+                        <th>Tahun Lulus</th>
+                        <th>IPK</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($getPendidikan as $item)
+                        <tr>
+                            <td>{{ $item['pendidikan'] }}</td>
+                            <td>{{ $item['akademik'] }}</td>
+                            <td>{{ $item['jurusan'] }}</td>
+                            <td>{{ $item['lulus'] }}</td>
+                            <td>{{ $item['ipk'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect waves-float waves-light"
+                                    wire:click="Deletependidikan('{{ strval($item['_id']) }}')">Hapus</button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <h5 class="card-header">Riwayat Pelatihan</h5>
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="name" class="form-label">Nama Kursus</label>
+                        <input class="form-control" type="text" id="kursus" wire:model="kursus" autofocus />
+                        @error('kursus')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Sertifikat</label>
+                        <input class="form-control" type="text" wire:model="sertifikat" id="sertifikat" />
+                        @error('sertifikat')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="email" class="form-label">Tahun</label>
+                        <input class="form-control" type="number" id="tahun" wire:model="tahun" />
+                        @error('tahun')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                @if (session()->has('message_pelatihan'))
+                    <div class="alert alert-success">
+                        {{ session('message_pelatihan') }}
+                    </div>
+                @endif
+                @if (session()->has('error_pelatihan'))
+                    <div class="alert alert-danger">
+                        {{ session('error_pelatihan') }}
+                    </div>
+                @endif
+                <div class="mt-2">
+                    <button type="submit" wire:click.prevent="pelatihan()" class="btn btn-primary me-2">Save
                         changes</button>
                     <button type="reset" class="btn btn-label-secondary">Cancel</button>
                 </div>
             </form>
+            <br>
+            @if (session()->has('message_pelatihan_delete'))
+                <div class="alert alert-success">
+                    {{ session('message_pelatihan_delete') }}
+                </div>
+            @endif
+            @if (session()->has('error_pelatihan_delete'))
+                <div class="alert alert-danger">
+                    {{ session('error_pelatihan_delete') }}
+                </div>
+            @endif
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Kursus / Seminar</th>
+                        <th>Setifikat (Ada / Tidak Ada)</th>
+                        <th>Tahun</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($getPelatihan as $item)
+                        <tr>
+                            <td>{{ $item['kursus'] }}</td>
+                            <td>{{ $item['sertifikat'] }}</td>
+                            <td>{{ $item['tahun'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect waves-float waves-light"
+                                    wire:click="Deletepelatihan('{{ strval($item['_id']) }}')">Hapus</button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
         </div>
-        <!-- /Account -->
     </div>
+    <br>
+
+
+    <div class="card">
+        <h5 class="card-header">Riwayat Pekerjaan</h5>
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="name" class="form-label">Nama Perusahaan</label>
+                        <input class="form-control" type="text" id="perusahaan" wire:model="perusahaan"
+                            autofocus />
+                        @error('perusahaan')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="last_name" class="form-label">Posisi Terakhir</label>
+                        <input class="form-control" type="text" wire:model="posisi" id="posisi" />
+                        @error('posisi')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="email" class="form-label">Pendapatan Terakhir</label>
+                        <input class="form-control" type="number" id="pendapatan" wire:model="pendapatan" />
+                        @error('pendapatan')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="email" class="form-label">Tahun</label>
+                        <input class="form-control" type="number" id="tahun_bekerja" wire:model="tahun_bekerja" />
+                        @error('tahun_bekerja')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                @if (session()->has('message_pekerjaan'))
+                    <div class="alert alert-success">
+                        {{ session('message_pekerjaan') }}
+                    </div>
+                @endif
+                @if (session()->has('error_pekerjaan'))
+                    <div class="alert alert-danger">
+                        {{ session('error_pekerjaan') }}
+                    </div>
+                @endif
+                <div class="mt-2">
+                    <button type="submit" wire:click.prevent="pekerjaan()" class="btn btn-primary me-2">Save
+                        changes</button>
+                    <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                </div>
+            </form>
+            <br>
+            @if (session()->has('message_pekerjaan_delete'))
+                <div class="alert alert-success">
+                    {{ session('message_pekerjaan_delete') }}
+                </div>
+            @endif
+            @if (session()->has('error_pekerjaan_delete'))
+                <div class="alert alert-danger">
+                    {{ session('error_pekerjaan_delete') }}
+                </div>
+            @endif
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Perusahaan</th>
+                        <th>Posisi Terakhir</th>
+                        <th>Pendapatan Terakhir</th>
+                        <th>Tahun Bekerja</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($getPekerjaan as $item)
+                        <tr>
+                            <td>{{ $item['perusahaan'] }}</td>
+                            <td>{{ $item['posisi'] }}</td>
+                            <td>{{ $item['pendapatan'] }}</td>
+                            <td>{{ $item['tahun_bekerja'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect waves-float waves-light"
+                                    wire:click="Deletepekerjaan('{{ strval($item['_id']) }}')">Hapus</button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <h5 class="card-header">Skill / Keterampilan yang dimiliki</h5>
+        <div class="card-body">
+            <form>
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="name" class="form-label">SKill</label>
+                        <input class="form-control" type="text" id="skill" wire:model="skill" autofocus />
+                        @error('skill')
+                            <span class="error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                @if (session()->has('message_skill'))
+                    <div class="alert alert-success">
+                        {{ session('message_skill') }}
+                    </div>
+                @endif
+                @if (session()->has('error_skill'))
+                    <div class="alert alert-danger">
+                        {{ session('error_skill') }}
+                    </div>
+                @endif
+                <div class="mt-2">
+                    <button type="submit" wire:click.prevent="skill()" class="btn btn-primary me-2">Save
+                        changes</button>
+                    <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                </div>
+            </form>
+            <br>
+            @if (session()->has('message_skill_delete'))
+                <div class="alert alert-success">
+                    {{ session('message_skill_delete') }}
+                </div>
+            @endif
+            @if (session()->has('error_skill_delete'))
+                <div class="alert alert-danger">
+                    {{ session('error_skill_delete') }}
+                </div>
+            @endif
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th width="50px">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($getSkill as $item)
+                        <tr>
+                            <td>{{ $item['skill'] }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect waves-float waves-light"
+                                    wire:click="Deleteskill('{{ strval($item['_id']) }}')">Hapus</button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
     <div class="card">
         <h5 class="card-header">Delete Account</h5>
         <div class="card-body">
@@ -262,15 +625,16 @@
                     <input class="form-control" type="password" name="deletepassword" id="deletepassword"
                         required />
                     <label class="form-check-label" for="deletepassword">I confirm my account
-                        deactivation</label>
+                        deactivation input password</label>
                 </div>
                 <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" name="accountActivation"
-                        id="accountActivation" required/>
+                    <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation"
+                        required />
                     <label class="form-check-label" for="accountActivation">I confirm my account
                         deactivation</label>
                 </div>
-                <button type="submit" id="btn-add" class="btn btn-danger deactivate-account">Deactivate Account</button>
+                <button type="submit" id="btn-add" class="btn btn-danger deactivate-account">Deactivate
+                    Account</button>
             </form>
         </div>
     </div>

@@ -2,18 +2,18 @@ APP_NAME=Laravel
 APP_ENV=local
 APP_KEY=base64:007CLdrt6adjzvVmpXC5aHpmiC9pBxhjO7L7Si9EgBU=
 APP_DEBUG=true
-APP_URL=http://localhost
+APP_URL=http://127.0.0.1:8000/
 
 LOG_CHANNEL=stack
 LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
 DB_CONNECTION=mongodb
-DB_HOST=cluster0.hy8kkqo.mongodb.net
+DB_HOST=cluster0.xdohojw.mongodb.net
 DB_PORT=27017
-DB_DATABASE=vuexy
-DB_USERNAME=dotprima
-DB_PASSWORD=attagen1
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 DB_BASE_URI=mongodb+srv://
 
 BROADCAST_DRIVER=log
